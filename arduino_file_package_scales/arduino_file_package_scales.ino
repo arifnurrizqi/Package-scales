@@ -3,21 +3,18 @@
 // #include "soc/rtc.h"
 #include "HX711.h"
 #include <WiFi.h>
-#include <PubSubClient.h>
+
 // define pinout used
 #define CALIBRATION_FACTOR 98
 #define LOADCELL_DT_PIN 18
 #define LOADCELL_SCK_PIN 19
 // #define RESET_BUTTON_PIN 2
 #define SPARE_BUTTON_PIN 4
+
 // Replace the next variables with your SSID/Password combination
 const char* ssid = "YOI";
 const char* password = "12345678";
-// Add your MQTT Broker IP address:
-const char* mqtt_server = "broker.hivemq.com";
-const char* mqtt_client_name = "atuo_weight_monitor";
-const char* mqtt_topic_weight = "smart-scale/weight";
-const char* mqtt_topic_volume = "smart-scale/volume";
+
 //define sound speed in cm/uS
 #define SOUND_SPEED 0.034
 #define CM_TO_INCH 0.393701
@@ -32,23 +29,21 @@ float distanceLimit[] = {46,25.3,21.2,25.3,20.7};
 LiquidCrystal_I2C lcd(0x27, LCD_COLOUMN, LCD_ROW);
 HX711 scale;
 WiFiClient espClient;
-PubSubClient client(espClient);
+
 // variable initiation
-long duration;
-float distanceCm;
-float weight;
-float volume;
+// Deklarasi variabel tipe long untuk menyimpan durasi waktu dan mili detik
+long duration, currentmillis, previousmillis, previousmillis2, interval = 1000, interval2 = 5000;
+
+// Deklarasi variabel tipe float untuk menyimpan data yang mengandung pecahan desimal
+float distanceCm, weight, volume, panjang, lebar, tinggi;
+
+// Deklarasi variabel tipe int untuk menyimpan angka bulat
 int a;
-char buffer[20];
-float panjang;
-float lebar;
-float tinggi;
-long currentmillis;
-long previousmillis;
-long previousmillis2;
-long interval=1000;
-long interval2=5000;
-//pendefinisian fungsi
+
+// Deklarasi array char untuk menyimpan karakter
+char buffer[20]; // Buffer karakter dengan panjang 20
+
+// Pendefinisian fungsi
 float measureDistance(int i);
 float measureVolume();
 float measureWeight();
@@ -78,15 +73,9 @@ void setup() {
   scale.set_scale(CALIBRATION_FACTOR);
   scale.tare(); // reset the scale to 0
   setup_wifi();
-  client.setServer(mqtt_server, 1883);
-  client.setCallback(callback);
 }
 
-void loop() {
-  if (!client.connected()) {
-    reconnect();
-  }
-  client.loop();
+void loop() {  
   currentmillis = millis();
   if(currentmillis - previousmillis >= interval){
     previousmillis = currentmillis;
@@ -95,9 +84,7 @@ void loop() {
     displayData(volume, weight);
     Serial.println("Publishing data...");
     sprintf(buffer, "%d", int(weight));
-    client.publish(mqtt_topic_weight, buffer);
     sprintf(buffer, "%d", int(volume));
-    client.publish(mqtt_topic_volume, buffer);
     Serial.println(digitalRead(SPARE_BUTTON_PIN));
     if(digitalRead(SPARE_BUTTON_PIN) == LOW){
       displayReset();
@@ -107,6 +94,7 @@ void loop() {
       }
     }
   }
+
   if(Serial.available()){
     switch(Serial.read()) // akhiri setiap perintah dengan ';' contoh "s1000;"
     {
@@ -298,44 +286,3 @@ void setup_wifi() {
   Serial.println(WiFi.localIP());
 }
 
-void callback(char* topic, byte* message, unsigned int length) {
-  Serial.print("Message arrived on topic: ");
-  Serial.print(topic);
-  Serial.print(". Message: ");
-  String messageTemp;
-
-  for (int i = 0; i < length; i++) {
-  Serial.print((char)message[i]);
-  messageTemp += (char)message[i];
-  }
-    Serial.println();
-    // Feel free to add more if statements to control more GPIOs with MQTT
-    if (String(topic) == "EWS/esp32/output") {
-    Serial.print("Changing output to ");
-    if(messageTemp == "on"){
-      Serial.println("on");
-    }
-    else if(messageTemp == "off"){
-      Serial.println("off");
-    }
-  }
-}
-
-void reconnect() {
-  // Loop until we're reconnected
-  while (!client.connected()) {
-  // Serial.print("Attempting MQTT connection...");
-  // Attempt to connect
-  if (client.connect("EWS - Fire Alarm")) {
-    // Serial.println("connected");
-    // Subscribe
-    client.subscribe("EWS/esp32/output");
-    } else {
-      Serial.print("failed, rc=");
-      Serial.print(client.state());
-      Serial.println("try again in 5 seconds");
-      // Wait 5 seconds before retrying
-      delay(5000);
-    }
-  }
-}
