@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ongkir Checker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Ongkir Checker</h1>
+    <form id="ongkirForm">
+      <div class="form-group">
+        <label for="courier">Kurir:</label>
+        <select id="courier" name="courier">
+          <option value="jne">JNE</option>
+          <option value="sicepat">SiCepat</option>
+          <option value="anteraja">Anteraja</option>
+          <option value="lion">Lion</option>
+          <option value="sap">SAP</option>
+          <option value="pos">POS</option>
+          <option value="ide">ID Express</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="origin">Origin:</label>
+        <input type="text" id="origin" name="origin" required>
+      </div>
+      <div class="form-group">
+        <label for="destination">Destination:</label>
+        <input type="text" id="destination" name="destination" required>
+      </div>
+      <div class="form-group">
+        <label for="weight">Weight (gram):</label>
+        <input type="number" id="weight" name="weight" required>
+      </div>
+      <button type="submit">Check Ongkir</button>
+    </form>
+    <div id="results"></div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
