@@ -1,31 +1,40 @@
-document.getElementById('ongkirForm').addEventListener('submit', function (event) {
-  event.preventDefault();
-
-  const courier = document.getElementById('courier').value;
-  const origin = document.getElementById('origin').value;
-  const destination = document.getElementById('destination').value;
-  const weight = document.getElementById('weight').value;
-
-  const apiKey = '0959044ca5412704d19571e7a909c03f6a37111f1333d33e6aaa2bd3f4c12115';
-  const url = `https://api.binderbyte.com/v1/cost?api_key=${apiKey}&courier=${courier}&origin=${origin}&destination=${destination}&weight=${weight}`;
-
-  fetch(url)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Server responded with status: ${response.status}`);
-      }
-      return response.json();
-    })
+document.addEventListener('DOMContentLoaded', (event) => {
+  fetch('/readings')
+    .then(response => response.json())
     .then(data => {
-      if (data.status === 200) {
-        displayResults(data);
-      } else {
-        throw new Error(`API error: ${data.message}`);
-      }
-    })
-    .catch(error => {
-      displayError(error);
+      document.getElementById('weight').value = data.weight;
+      document.getElementById('volume').value = data.volume;
     });
+
+  document.getElementById('ongkirForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const courier = document.getElementById('courier').value;
+    const origin = document.getElementById('origin').value;
+    const destination = document.getElementById('destination').value;
+    const weight = document.getElementById('weight').value;
+
+    const apiKey = '0959044ca5412704d19571e7a909c03f6a37111f1333d33e6aaa2bd3f4c12115';
+    const url = `https://api.binderbyte.com/v1/cost?api_key=${apiKey}&courier=${courier}&origin=${origin}&destination=${destination}&weight=${weight}`;
+
+    fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Server responded with status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data.status === 200) {
+          displayResults(data);
+        } else {
+          throw new Error(`API error: ${data.message}`);
+        }
+      })
+      .catch(error => {
+        displayError(error);
+      });
+  });
 });
 
 function displayResults(data) {

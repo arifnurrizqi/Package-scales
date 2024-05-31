@@ -341,8 +341,8 @@ void initLittleFS() {
 
 // Get Data Readings and return JSON object
 String getDataReadings(){
-  readings["temperature"] = String(measureWeight());
-  readings["humidity"] =  String(measureWeight());
+  readings["weight"] = String(measureWeight());
+  readings["volume"] =  String(measureVolume());
   String jsonString = JSON.stringify(readings);
   return jsonString;
 }
