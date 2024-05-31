@@ -6,6 +6,32 @@ document.addEventListener('DOMContentLoaded', (event) => {
       document.getElementById('volume').value = data.volume;
     });
 
+  if (!!window.EventSource) {
+    var source = new EventSource('/events');
+    
+    source.addEventListener('open', function(e) {
+      console.log("Events Connected");
+    }, false);
+  
+    source.addEventListener('error', function(e) {
+      if (e.target.readyState != EventSource.OPEN) {
+        console.log("Events Disconnected");
+      }
+    }, false);
+    
+    source.addEventListener('message', function(e) {
+      console.log("message", e.data);
+    }, false);
+    
+    source.addEventListener('new_readings', function(e) {
+      console.log("new_readings", e.data);
+      var myObj = JSON.parse(e.data);
+      console.log(myObj);
+      document.getElementById('weight').value = myObj.weight;
+      document.getElementById('volume').value = myObj.volume;
+    }, false);
+  }
+
   document.getElementById('ongkirForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
@@ -16,6 +42,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     const apiKey = '0959044ca5412704d19571e7a909c03f6a37111f1333d33e6aaa2bd3f4c12115';
     const url = `https://api.binderbyte.com/v1/cost?api_key=${apiKey}&courier=${courier}&origin=${origin}&destination=${destination}&weight=${weight}`;
+
+    console.log(url);
 
     fetch(url)
       .then(response => {
@@ -54,6 +82,9 @@ function displayResults(data) {
     const price = document.createElement('p');
     price.textContent = `Price: ${cost.price}`;
     resultDiv.appendChild(price);
+
+    const line = document.createElement('hr');
+    resultDiv.appendChild(line);
 
     resultsDiv.appendChild(resultDiv);
   });
