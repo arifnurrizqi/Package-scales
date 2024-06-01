@@ -26,7 +26,7 @@ const char* password = "takonmama";
 const int trigPin[] = {13,14,26,33,15};
 const int echoPin[] = {12,27,25,32,5};
 float distanceArr[5];
-float distanceLimit[] = {46,25.3,21.2,25.3,20.7};
+float distanceLimit[] = {47.12,22.645,22.745,22.55,22.28};
 LiquidCrystal_I2C lcd(0x27, 20, 4); // Use lcd i2c 20x4
 HX711 scale;
 // WiFiClient espClient;
@@ -246,8 +246,8 @@ float measureVolume(){
   //float lebar;
   //float tinggi;
   float volume;
-  for(int i=0;i<5;i++){
-  distanceArr[i] = measureDistance(i);
+  for(int i=0; i<5; i++){
+    distanceArr[i] = measureDistance(i);
   }
   panjang = ((distanceLimit[1] - distanceArr[1]) + (distanceLimit[3] -
   distanceArr[3]));
