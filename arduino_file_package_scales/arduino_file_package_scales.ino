@@ -15,8 +15,8 @@
 #define SPARE_BUTTON_PIN 4
 
 // Replace the next variables with your SSID/Password combination
-const char* ssid = "ARNUR";
-const char* password = "takonmama";
+const char* ssid = "Redmi 7A";
+const char* password = "asdfghjkl";
 
 //define sound speed in cm/uS
 #define SOUND_SPEED 0.034
@@ -238,7 +238,7 @@ float measureDistance(int i){
 }
 
 float measureWeight(){
-  return scale.get_units(10);
+  return scale.get_units(10)/1000; // dibagi 1000 untuk menghitung kilogram
 }
 
 float measureVolume(){
@@ -297,7 +297,7 @@ void displayData(float volume, float weight){
   lcd.print("Berat: ");
   lcd.print(weight);
   lcd.setCursor(15,3);
-  lcd.print("gram");
+  lcd.print("Kg");
 }
 
 void displayWelcome(){
