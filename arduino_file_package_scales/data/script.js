@@ -1,9 +1,14 @@
+const weight = document.getElementById('weight').value;
+const volume = document.getElementById('volume').value;
+const weight_volume =  document.getElementById('weight_volume').value;
+
 document.addEventListener('DOMContentLoaded', (event) => {
   fetch('/readings')
     .then(response => response.json())
     .then(data => {
-      document.getElementById('weight').value = data.weight;
-      document.getElementById('volume').value = data.volume;
+      weight = data.weight;
+      volume = data.volume;
+      weight_volume = data.volume/6000;
     });
 
   if (!!window.EventSource) {
@@ -27,8 +32,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
       console.log("new_readings", e.data);
       var myObj = JSON.parse(e.data);
       console.log(myObj);
-      document.getElementById('weight').value = myObj.weight;
-      document.getElementById('volume').value = myObj.volume;
+      weight = myObj.weight;
+      volume = myObj.volume;
+      weight_volume = myObj.volume/6000;
     }, false);
   }
 
@@ -38,10 +44,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const courier = document.getElementById('courier').value;
     const origin = document.getElementById('origin').value;
     const destination = document.getElementById('destination').value;
-    const weight = document.getElementById('weight').value;
+    let last_weight;
+
+    if(weight < weight_volume) {
+      last_weight = weight_volume;
+    } else {
+      last_weight = weight;
+    }
 
     const apiKey = '0959044ca5412704d19571e7a909c03f6a37111f1333d33e6aaa2bd3f4c12115';
-    const url = `https://api.binderbyte.com/v1/cost?api_key=${apiKey}&courier=${courier}&origin=${origin}&destination=${destination}&weight=${weight}`;
+    const url = `https://api.binderbyte.com/v1/cost?api_key=${apiKey}&courier=${courier}&origin=${origin}&destination=${destination}&weight=${last_weight}`;
 
     console.log(url);
 
