@@ -8,10 +8,10 @@
 #include "HX711.h"
 
 #define CALIBRATION_FACTOR 98
+
 // define pinout used
 #define LOADCELL_DT_PIN 18
 #define LOADCELL_SCK_PIN 19
-// #define RESET_BUTTON_PIN 2
 #define SPARE_BUTTON_PIN 4
 
 // Replace the next variables with your SSID/Password combination
@@ -26,7 +26,7 @@ const char* password = "asdfghjkl";
 const int trigPin[] = {13,14,26,33,15};
 const int echoPin[] = {12,27,25,32,5};
 float distanceArr[5];
-float distanceLimit[] = {47.12,22.645,22.745,22.55,22.28};
+float distanceLimit[] = {50.45,24.15,23.9,24.2,23.9};
 LiquidCrystal_I2C lcd(0x27, 20, 4); // Use lcd i2c 20x4
 HX711 scale;
 // WiFiClient espClient;
@@ -138,79 +138,7 @@ void loop() {
     if(digitalRead(SPARE_BUTTON_PIN) == LOW){
       displayReset();
       scale.tare();
-      while (digitalRead(SPARE_BUTTON_PIN) == LOW) {
-        delay(10);
-      }
-    }
-  }
-
-  if(Serial.available()){
-    switch(Serial.read()) // akhiri setiap perintah dengan ';' contoh "s1000;"
-    {
-      case 's':
-        a = Serial.parseInt();
-        for(int i=0;i<5;i++){
-          measureDistance(a);
-        } 
-        Serial.println();
-        break;
-
-      case 'a':
-        Serial.println("test");
-        break;
-
-      case 'b':
-        // set cursor to first column, first row
-        lcd.setCursor(0, 0);
-        // print message
-        lcd.print("Hello, World!");
-        delay(1000);
-        // clears the display to print new message
-        lcd.clear();
-        // set cursor to first column, second row
-        lcd.setCursor(0,1);
-        lcd.print("Hello, World!");
-        delay(1000);
-        lcd.clear();
-        break;
-
-      case 'c':
-        if (scale.is_ready()) {
-          scale.set_scale();
-          Serial.println("Tare... remove any weights from the scale.");
-          delay(5000);
-          scale.tare();
-          Serial.println("Tare done...");
-          Serial.print("Place a known weight on the scale...");
-          delay(5000);
-          long reading = scale.get_units(10);
-          Serial.print("Result: ");
-          Serial.println(reading);
-        }
-        else {
-          Serial.println("HX711 not found.");
-        }
-        break;
-
-      case 'd':
-        Serial.print("one reading:\t");
-        Serial.print(scale.get_units(), 1);
-        Serial.print("\t| average:\t");
-        Serial.println(scale.get_units(10), 5);
-        break;
-
-      case 'e':
-        scale.tare();
-        delay(500);
-        Serial.print("one reading:\t");
-        Serial.print(scale.get_units(), 1);
-        Serial.print("\t| average:\t");
-        Serial.println(scale.get_units(10), 5);
-        break;
-
-      case 'f':
-        measureVolume();
-        break;
+      delay(100);
     }
   }
 }
@@ -314,8 +242,8 @@ void displayWelcome(){
 void displayReset(){
   lcd.clear();
   lcd.setCursor(0, 0);
-  lcd.print("Kalibrasi");
-  delay(1000);
+  lcd.print("Kalibrasi sensor berat");
+  delay(2000);
 }
 
 void setup_wifi() {
