@@ -1,14 +1,14 @@
-const weight = document.getElementById('weight').value;
-const volume = document.getElementById('volume').value;
-const weight_volume =  document.getElementById('weight_volume').value;
+const weight = document.getElementById('weight');
+const volume = document.getElementById('volume');
+const weight_volume =  document.getElementById('weight_volume');
 
 document.addEventListener('DOMContentLoaded', (event) => {
   fetch('/readings')
     .then(response => response.json())
     .then(data => {
-      weight = data.weight;
-      volume = data.volume;
-      weight_volume = data.volume/6000;
+      weight.value = data.weight;
+      volume.value = data.volume;
+      weight_volume.value = data.volume/6000;
     });
 
   if (!!window.EventSource) {
@@ -32,9 +32,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
       console.log("new_readings", e.data);
       var myObj = JSON.parse(e.data);
       console.log(myObj);
-      weight = myObj.weight;
-      volume = myObj.volume;
-      weight_volume = myObj.volume/6000;
+      weight.value = myObj.weight;
+      volume.value = myObj.volume;
+      weight_volume.value = myObj.volume/6000;
     }, false);
   }
 
@@ -44,6 +44,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const courier = document.getElementById('courier').value;
     const origin = document.getElementById('origin').value;
     const destination = document.getElementById('destination').value;
+    const weight = document.getElementById('weight').value;
+    const weight_volume =  document.getElementById('weight_volume').value;
     let last_weight;
 
     if(weight < weight_volume) {

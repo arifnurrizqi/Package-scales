@@ -1,18 +1,18 @@
-#include <WiFi.h>
 #include <Arduino.h>
-#include "LittleFS.h"
-#include <AsyncTCP.h>
-#include <ESPAsyncWebServer.h>
-#include <Arduino_JSON.h>
-#include <LiquidCrystal_I2C.h>
-#include "HX711.h"
+#include <WiFi.h>               // Library Wifi
+#include "LittleFS.h"           // Library file sistem ESP32 reference https://randomnerdtutorials.com/arduino-ide-2-install-esp32-littlefs/ 
+#include <AsyncTCP.h>           // Library untuk Asinkron TCP
+#include <ESPAsyncWebServer.h>  // Library ESP Web Seb Server Asinkron
+#include <Arduino_JSON.h>       // Library JSON (JavaScript Object National) arduino
+#include <LiquidCrystal_I2C.h>  // Library LCD I2C
+#include "HX711.h"              // Library Loadcell HX711
 
-#define CALIBRATION_FACTOR 98
+#define CALIBRATION_FACTOR 98   // Kalibrasi faktor Loadcell
 
 // define pinout used
-#define LOADCELL_DT_PIN 18
-#define LOADCELL_SCK_PIN 19
-#define SPARE_BUTTON_PIN 4
+#define LOADCELL_DT_PIN 18      // Pin 18 to Pin DT HX711 Module
+#define LOADCELL_SCK_PIN 19     // Pin 19 to Pin SCK HX711 Module
+#define SPARE_BUTTON_PIN 4      // Pin 4 to Push Button Tare
 
 // Replace the next variables with your SSID/Password combination
 const char* ssid = "Redmi 7A";
@@ -23,13 +23,12 @@ const char* password = "asdfghjkl";
 #define CM_TO_INCH 0.393701
 
 // 0 atas// 1 kanan// 2 depan// 3 kiri// 4 belakang
-const int trigPin[] = {13,14,26,33,15};
-const int echoPin[] = {12,27,25,32,5};
+const int trigPin[] = {13,14,26,33,15}; // Pin ESP32 for trig pin HC-SR04 (ultrasonic module)
+const int echoPin[] = {12,27,25,32,5};  // Pin ESP32 for echo ppin HC-SR04 (ultrasonic module)
 float distanceArr[5];
-float distanceLimit[] = {50.45,24.15,23.9,24.2,23.9};
+float distanceLimit[] = {50.45,24.15,23.9,24.2,23.9}; // Naikan nilainya jika pembacaan < ukuran real atau turunkan nilainya jika pembacaan > ukuran real  
 LiquidCrystal_I2C lcd(0x27, 20, 4); // Use lcd i2c 20x4
 HX711 scale;
-// WiFiClient espClient;
 
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
@@ -74,7 +73,6 @@ void setup() {
     pinMode(echoPin[i], INPUT); // Sets the echoPin as an Input
   }
 
-  // pinMode(RESET_BUTTON_PIN, INPUT_PULLUP);
   pinMode(SPARE_BUTTON_PIN, INPUT_PULLUP);
   // LCD setup
   lcd.init(); // initialize LCD
