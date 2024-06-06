@@ -36,7 +36,7 @@ h1 {
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
-} 
+}
 
 .form-group input {
   width: 94%;
@@ -62,4 +62,22 @@ button:hover {
 
 #results {
   margin-top: 20px;
+}
+
+.content {
+  padding: 5%;
+}
+.card-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+.card {
+  background-color: white;
+}
+.card-title {
+  font-size: 1.2rem;
+  text-align: center;
 }
