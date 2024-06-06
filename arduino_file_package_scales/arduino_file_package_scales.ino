@@ -58,6 +58,7 @@ float measureVolume();
 float measureWeight();
 void displayWelcome();
 void displayData(float volume, float weight);
+void displayReady();
 void displayReset();
 void setup_wifi();
 void callback(char* topic, byte* message, unsigned int length);
@@ -121,7 +122,12 @@ void loop() {
     previousmillis = currentmillis;
     volume = measureVolume();
     weight = measureWeight();
-    displayData(volume, weight);
+
+    if(weight == 0.0){
+      displayReady();
+    } else {
+      displayData(volume, weight);
+    }
 
     // Send data to the client
     events.send("ping",NULL,millis());
@@ -235,6 +241,14 @@ void displayWelcome(){
   lcd.setCursor(4, 2);
   lcd.print("DIMENSI PAKET");
   delay(3000);
+}
+
+void displayReady() {
+  lcd.clear();
+  lcd.setCursor(0,1);
+  lcd.print("ALAT SIAP UNTUK");
+  lcd.setCursor(6,1);
+  lcd.print("MENGUKUR");
 }
 
 void displayReset(){
