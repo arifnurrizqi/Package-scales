@@ -26,7 +26,7 @@ const char* password = "asdfghjkl";
 const int trigPin[] = {13,14,26,33,15}; // Pin ESP32 for trig pin HC-SR04 (ultrasonic module)
 const int echoPin[] = {12,27,25,32,5};  // Pin ESP32 for echo ppin HC-SR04 (ultrasonic module)
 float distanceArr[5];
-float distanceLimit[] = {50.45,24.15,23.9,24.2,23.9}; // Naikan nilainya jika pembacaan < ukuran real atau turunkan nilainya jika pembacaan > ukuran real  
+float distanceLimit[] = {50.5,24.15,23.9,24.2,23.9}; // Naikan nilainya jika pembacaan < ukuran real atau turunkan nilainya jika pembacaan > ukuran real  
 LiquidCrystal_I2C lcd(0x27, 20, 4); // Use lcd i2c 20x4
 HX711 scale;
 
@@ -59,7 +59,7 @@ float measureWeight();
 void displayWelcome();
 void displayData(float volume, float weight);
 void displayReady();
-void displayReset();
+void displayTare(); // Fungsi untuk meng nol kan pembacaan berat
 void setup_wifi();
 void callback(char* topic, byte* message, unsigned int length);
 void reconnect();
@@ -123,10 +123,15 @@ void loop() {
     volume = measureVolume();
     weight = measureWeight();
 
-    if(weight == 0.0){
+    if(weight < 0.01){
       displayReady();
+      Serial.println("Siap Mengukur");
     } else {
       displayData(volume, weight);
+      Serial.print("Volume: ");
+      Serial.println(volume);
+      Serial.print("Berat: ");
+      Serial.println(weight);
     }
 
     // Send data to the client
@@ -134,14 +139,9 @@ void loop() {
     events.send(getDataReadings().c_str(),"new_readings" ,millis());
 
     Serial.println("Publishing data...");
-    Serial.print("Volume: ");
-    Serial.println(volume);
-    Serial.print("Berat: ");
-    Serial.println(weight);
 
     if(digitalRead(SPARE_BUTTON_PIN) == LOW){
-      displayReset();
-      scale.tare();
+      displayTare();
       delay(100);
     }
   }
@@ -241,20 +241,34 @@ void displayWelcome(){
   lcd.setCursor(4, 2);
   lcd.print("DIMENSI PAKET");
   delay(3000);
+
 }
 
 void displayReady() {
   lcd.clear();
-  lcd.setCursor(0,1);
+  lcd.setCursor(2,1);
   lcd.print("ALAT SIAP UNTUK");
-  lcd.setCursor(6,1);
+  lcd.setCursor(6,2);
   lcd.print("MENGUKUR");
+  delay(2000);
 }
 
-void displayReset(){
+void displayTare(){
+  scale.tare(); // Fungsi untuk meng nol kan pembacaan loadcell (builtin library HX711)
+
   lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print("Kalibrasi sensor berat");
+  lcd.setCursor(2, 1);
+  lcd.print("KALIBRASI SENSOR");
+  lcd.setCursor(2, 2);
+  lcd.print("BERAT");
+  delay(2000);
+  
+  lcd.clear();
+  lcd.setCursor(2, 1);
+  lcd.print("BERAT SAAT INI:");
+  lcd.setCursor(2, 2);
+  lcd.print(scale.get_units(10)/1000); // Untuk mendapatkan nilaiberat (KG) saat ini
+  lcd.print(" Kg");
   delay(2000);
 }
 
@@ -273,6 +287,13 @@ void setup_wifi() {
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
+
+  lcd.clear();
+  lcd.setCursor(1, 1);
+  lcd.print("IP Address: ");
+  lcd.setCursor(1, 2);
+  lcd.print(WiFi.localIP());
+  delay(10000); // lama menampilkan alamat IP pada lcd 10 detik
 }
 
 // Initialize LittleFS
