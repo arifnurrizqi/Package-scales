@@ -1,25 +1,28 @@
+/* Atur gaya dasar untuk halaman */
 body {
   font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  margin: 0;
-  padding: 0;
+  background-color: #f4f4f4;
 }
 
 .container {
-  background-color: white;
+  background-color: #fff;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 300px;
+  width: 90%;
+  max-width: 600px;
 }
 
 h1 {
-  font-size: 24px;
-  margin-bottom: 20px;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 15px;
 }
 
 .form-group {
@@ -31,33 +34,52 @@ h1 {
   margin-bottom: 5px;
 }
 
-.form-group select {
+.form-group input {
   width: 100%;
   padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-} 
-
-.form-group input {
-  width: 94%;
-  padding: 8px;
+  box-sizing: border-box;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
+.card-grid {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px; /* Space between cards */
+  margin-bottom: 20px;
+}
+
+.card {
+  /* padding: 20px; */
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  flex: 1; /* Allow cards to expand and fill the space equally */
+  text-align: center;
+}
+
+.card-title {
+  margin-bottom: 12px;
+  font-weight: bold;
+}
+
+canvas {
+  width: 100%;
+  height: auto;
+}
+
 button {
+  display: block;
   width: 100%;
   padding: 10px;
   background-color: #007bff;
+  color: #fff;
   border: none;
   border-radius: 4px;
-  color: white;
-  font-size: 16px;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #0d57a7;
 }
 
 #results {

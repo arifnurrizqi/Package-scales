@@ -1,47 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ongkir Checker</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="container">
-    <h1>Ongkir Checker</h1>
-    <form id="ongkirForm">
-      <div class="form-group">
-        <label for="courier">Kurir:</label>
-        <select id="courier" name="courier">
-          <option value="jne">JNE</option>
-          <option value="sicepat">SiCepat</option>
-          <option value="anteraja">Anteraja</option>
-          <option value="lion">Lion</option>
-          <option value="sap">SAP</option>
-          <option value="pos">POS</option>
-          <option value="ide">IDE</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="origin">Origin:</label>
-        <input type="text" id="origin" name="origin" required>
-      </div>
-      <div class="form-group">
-        <label for="destination">Destination:</label>
-        <input type="text" id="destination" name="destination" required>
-      </div>
-      <div class="form-group">
-        <label for="weight">Weight (kg):</label>
-        <input type="text" id="weight" name="weight" readonly>
-      </div>
-      <div class="form-group">
-        <label for="volume">Volume (cm³):</label>
-        <input type="text" id="volume" name="volume" readonly>
-      </div>
-      <button type="submit">Check Ongkir</button>
-    </form>
-    <div id="results"></div>
-  </div>
-  <script src="/script.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hasil Pengukuran</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- memanggil library untuk membuat gauges -->
+    <script src="gauges.js"></script> 
+  </head>
+  <body>
+    <div class="container">
+      <h1>Hasil Pengukuran</h1>
+      <form id="ongkirForm">
+        <div class="form-group">
+          <label for="name">Nama:</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+        <div class="form-group">
+          <label for="date">Tanggal:</label>
+          <input type="date" id="date" name="date" required />
+        </div>
+        <div class="card-grid">
+          <div class="card">
+            <p class="card-title">Berat (Kg)</p>
+            <canvas id="gauge-weight"></canvas>
+          </div>
+          <div class="card">
+            <p class="card-title">Volume (cm³)</p>
+            <canvas id="gauge-volume"></canvas>
+          </div>
+        </div>
+        <button type="button" id="printButton">Simpan PDF</button>
+      </form>
+      <div id="results"></div>
+    </div>
+    <script src="script.js"></script>
+  </body>
 </html>
