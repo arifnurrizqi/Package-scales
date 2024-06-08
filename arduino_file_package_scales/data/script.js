@@ -1,17 +1,14 @@
-const weight = document.getElementById('weight');
-const volume = document.getElementById('volume');
-
 // Create Weight Gauge
 var gaugeWeight = new RadialGauge({
   renderTo: 'gauge-weight',
-  width: 300,
-  height: 300,
+  width: 150,
+  height: 150,
   units: "Weight (Kg)",
   minValue: 0,
   maxValue: 20,
-  colorValueBoxRect: "#049faa",
-  colorValueBoxRectEnd: "#049faa",
-  colorValueBoxBackground: "#f1fbfc",
+  colorValueBoxRect: "#007bff",
+  colorValueBoxRectEnd: "#007bff",
+  colorValueBoxBackground: "#cee6ff",
   valueInt: 2,
   majorTicks: [
       "0",
@@ -28,18 +25,18 @@ var gaugeWeight = new RadialGauge({
       {
           "from": 80,
           "to": 100,
-          "color": "#03C0C1"
+          "color": "#4a9cf3"
       }
   ],
   colorPlate: "#fff",
   borderShadowWidth: 0,
   borders: false,
   needleType: "line",
-  colorNeedle: "#007F80",
-  colorNeedleEnd: "#007F80",
+  colorNeedle: "#0d57a7",
+  colorNeedleEnd: "#0d57a7",
   needleWidth: 2,
   needleCircleSize: 3,
-  colorNeedleCircleOuter: "#007F80",
+  colorNeedleCircleOuter: "#0d57a7",
   needleCircleOuter: true,
   needleCircleInner: false,
   animationDuration: 1500,
@@ -49,14 +46,14 @@ var gaugeWeight = new RadialGauge({
 // Create Volume Gauge
 var gaugeVolume = new RadialGauge({
   renderTo: 'gauge-volume',
-  width: 300,
-  height: 300,
+  width: 150,
+  height: 150,
   units: "Volume (cm³)",
   minValue: 0,
   maxValue: 125000,
-  colorValueBoxRect: "#049faa",
-  colorValueBoxRectEnd: "#049faa",
-  colorValueBoxBackground: "#f1fbfc",
+  colorValueBoxRect: "#007bff",
+  colorValueBoxRectEnd: "#007bff",
+  colorValueBoxBackground: "#cee6ff",
   valueInt: 2,
   majorTicks: [
       "0",
@@ -73,18 +70,18 @@ var gaugeVolume = new RadialGauge({
       {
           "from": 80,
           "to": 100,
-          "color": "#03C0C1"
+          "color": "#4a9cf3"
       }
   ],
   colorPlate: "#fff",
   borderShadowWidth: 0,
   borders: false,
   needleType: "line",
-  colorNeedle: "#007F80",
-  colorNeedleEnd: "#007F80",
+  colorNeedle: "#0d57a7",
+  colorNeedleEnd: "#0d57a7",
   needleWidth: 2,
   needleCircleSize: 3,
-  colorNeedleCircleOuter: "#007F80",
+  colorNeedleCircleOuter: "#0d57a7",
   needleCircleOuter: true,
   needleCircleInner: false,
   animationDuration: 1500,
@@ -95,9 +92,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
   fetch('/readings')
     .then(response => response.json())
     .then(data => {
-      weight.value = data.weight;
-      volume.value = data.volume;
-
       gaugeWeight.value = data.weight;
       gaugeVolume.value = data.volume;
     });
@@ -123,80 +117,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
       console.log("new_readings", e.data);
       var myObj = JSON.parse(e.data);
       console.log(myObj);
-      weight.value = myObj.weight;
-      volume.value = myObj.volume;
-
       gaugeWeight.value = myObj.weight;
       gaugeVolume.value = myObj.volume;
     }, false);
   }
 
-  document.getElementById('ongkirForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const courier = document.getElementById('courier').value;
-    const origin = document.getElementById('origin').value;
-    const destination = document.getElementById('destination').value;
-    const weight = document.getElementById('weight').value;
-    let last_weight;
-
-    if(weight < weight_volume) {
-      last_weight = weight_volume;
-    } else {
-      last_weight = weight;
-    }
-
-    const apiKey = '0959044ca5412704d19571e7a909c03f6a37111f1333d33e6aaa2bd3f4c12115';
-    const url = `https://api.binderbyte.com/v1/cost?api_key=${apiKey}&courier=${courier}&origin=${origin}&destination=${destination}&weight=${last_weight}`;
-
-    console.log(url);
-
-    fetch(url)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Server responded with status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        if (data.status === 200) {
-          displayResults(data);
-        } else {
-          throw new Error(`API error: ${data.message}`);
-        }
-      })
-      .catch(error => {
-        displayError(error);
-      });
+  document.getElementById('printButton').addEventListener('click', () => {
+    window.print();
   });
 });
-
-function displayResults(data) {
-  const resultsDiv = document.getElementById('results');
-  resultsDiv.innerHTML = '';
-
-  const costs = data.data.costs;
-
-  costs.forEach(cost => {
-    const resultDiv = document.createElement('div');
-    resultDiv.classList.add('result');
-
-    const service = document.createElement('p');
-    service.textContent = `Service: ${cost.service}`;
-    resultDiv.appendChild(service);
-
-    const price = document.createElement('p');
-    price.textContent = `Price: ${cost.price}`;
-    resultDiv.appendChild(price);
-
-    const line = document.createElement('hr');
-    resultDiv.appendChild(line);
-
-    resultsDiv.appendChild(resultDiv);
-  });
-}
-
-function displayError(error) {
-  const resultsDiv = document.getElementById('results');
-  resultsDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
-}
