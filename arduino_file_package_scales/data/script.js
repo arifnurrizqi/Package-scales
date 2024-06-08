@@ -1,95 +1,6 @@
 const weight = document.getElementById('weight');
 const volume = document.getElementById('volume');
-
-// Create Weight Gauge
-var gaugeWeight = new RadialGauge({
-  renderTo: 'gauge-weight',
-  width: 300,
-  height: 300,
-  units: "Weight (Kg)",
-  minValue: 0,
-  maxValue: 20,
-  colorValueBoxRect: "#049faa",
-  colorValueBoxRectEnd: "#049faa",
-  colorValueBoxBackground: "#f1fbfc",
-  valueInt: 2,
-  majorTicks: [
-      "0",
-      "4",
-      "8",
-      "12",
-      "16",
-      "20"
-
-  ],
-  minorTicks: 4,
-  strokeTicks: true,
-  highlights: [
-      {
-          "from": 80,
-          "to": 100,
-          "color": "#03C0C1"
-      }
-  ],
-  colorPlate: "#fff",
-  borderShadowWidth: 0,
-  borders: false,
-  needleType: "line",
-  colorNeedle: "#007F80",
-  colorNeedleEnd: "#007F80",
-  needleWidth: 2,
-  needleCircleSize: 3,
-  colorNeedleCircleOuter: "#007F80",
-  needleCircleOuter: true,
-  needleCircleInner: false,
-  animationDuration: 1500,
-  animationRule: "linear"
-}).draw();
-
-// Create Volume Gauge
-var gaugeVolume = new RadialGauge({
-  renderTo: 'gauge-volume',
-  width: 300,
-  height: 300,
-  units: "Volume (cm³)",
-  minValue: 0,
-  maxValue: 125000,
-  colorValueBoxRect: "#049faa",
-  colorValueBoxRectEnd: "#049faa",
-  colorValueBoxBackground: "#f1fbfc",
-  valueInt: 2,
-  majorTicks: [
-      "0",
-      "25000",
-      "50000",
-      "75000",
-      "100000",
-      "125000"
-
-  ],
-  minorTicks: 4,
-  strokeTicks: true,
-  highlights: [
-      {
-          "from": 80,
-          "to": 100,
-          "color": "#03C0C1"
-      }
-  ],
-  colorPlate: "#fff",
-  borderShadowWidth: 0,
-  borders: false,
-  needleType: "line",
-  colorNeedle: "#007F80",
-  colorNeedleEnd: "#007F80",
-  needleWidth: 2,
-  needleCircleSize: 3,
-  colorNeedleCircleOuter: "#007F80",
-  needleCircleOuter: true,
-  needleCircleInner: false,
-  animationDuration: 1500,
-  animationRule: "linear"
-}).draw();
+const weight_volume =  document.getElementById('weight_volume');
 
 document.addEventListener('DOMContentLoaded', (event) => {
   fetch('/readings')
@@ -97,9 +8,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     .then(data => {
       weight.value = data.weight;
       volume.value = data.volume;
-
-      gaugeWeight.value = data.weight;
-      gaugeVolume.value = data.volume;
+      weight_volume.value = data.volume/6000;
     });
 
   if (!!window.EventSource) {
@@ -125,9 +34,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
       console.log(myObj);
       weight.value = myObj.weight;
       volume.value = myObj.volume;
-
-      gaugeWeight.value = myObj.weight;
-      gaugeVolume.value = myObj.volume;
+      weight_volume.value = myObj.volume/6000;
     }, false);
   }
 
@@ -138,6 +45,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const origin = document.getElementById('origin').value;
     const destination = document.getElementById('destination').value;
     const weight = document.getElementById('weight').value;
+    const weight_volume =  document.getElementById('weight_volume').value;
     let last_weight;
 
     if(weight < weight_volume) {
