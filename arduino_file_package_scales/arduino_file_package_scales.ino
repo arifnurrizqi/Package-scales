@@ -46,14 +46,9 @@ long duration, currentmillis, previousmillis, previousmillis2, interval = 2000, 
 // Deklarasi variabel tipe float untuk menyimpan data yang mengandung pecahan desimal
 float distanceCm, weight, volume, panjang, lebar, tinggi;
 
-// Deklarasi variabel tipe int untuk menyimpan angka bulat
-int a;
-
-// Deklarasi array char untuk menyimpan karakter
-char buffer[20]; // Buffer karakter dengan panjang 20
-
 // Pendefinisian fungsi
 float measureDistance(int i);
+void measureDimension(float &panjang, float &lebar, float &tinggi);
 float measureVolume();
 float measureWeight();
 void displayWelcome();
