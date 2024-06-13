@@ -1,39 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hasil Pengukuran</title>
-    <link rel="stylesheet" href="style.css" />
-    <!-- memanggil library untuk membuat gauges -->
-    <script src="gauges.js"></script> 
-  </head>
-  <body>
-    <div class="container">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="heading">
+      <span id="time"></span>
       <h1>Hasil Pengukuran</h1>
-      <form id="ongkirForm">
-        <div class="form-group">
-          <label for="name">Nama:</label>
-          <input type="text" id="name" name="name" required />
-        </div>
-        <div class="form-group">
-          <label for="date">Tanggal:</label>
-          <input type="date" id="date" name="date" required />
-        </div>
-        <div class="card-grid">
-          <div class="card">
-            <p class="card-title">Berat (Kg)</p>
-            <canvas id="gauge-weight"></canvas>
-          </div>
-          <div class="card">
-            <p class="card-title">Volume (cm³)</p>
-            <canvas id="gauge-volume"></canvas>
-          </div>
-        </div>
-        <button type="button" id="printButton">Simpan PDF</button>
-      </form>
-      <div id="results"></div>
+      <span id="date"></span>
     </div>
-    <script src="script.js"></script>
-  </body>
+    <form id="measurementForm">
+      <div class="form-group">
+        <label for="name">Nama:</label>
+        <input type="text" id="name" name="name" required />
+      </div>
+      <div class="form-group">
+        <label for="address">Alamat:</label>
+        <textarea type="text" id="address" name="address" required ></textarea>
+      </div>
+    </form>
+    <div class="card-grid">
+      <div class="row">
+        <div class="card">
+          <p class="card-title"><b>Panjang</b> <br> (cm)</p>
+          <span id="length">0</span>
+        </div>
+        <div class="card">
+          <p class="card-title"> <b>Lebar</b> <br> (cm)</p>
+          <span id="width">0</span>
+        </div>
+        <div class="card">
+          <p class="card-title"><b>Tinggi</b> <br> (cm)</p>
+          <span id="height">0</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="card">
+          <p class="card-title"><b>Volume (cm³)</b> </p>
+          <span id="volume">0</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="card">
+          <p class="card-title"><b>Berat (kg)</b></p>
+          <span id="weight">0</span>
+        </div>
+      </div>
+    </div>
+    <button type="button" id="printButton">Simpan PDF</button>
+    <div id="results"></div>
+  </div>
+  <script src="script.js"></script>
+</body>
 </html>

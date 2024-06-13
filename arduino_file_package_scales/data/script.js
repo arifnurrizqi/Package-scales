@@ -1,99 +1,18 @@
-// Create Weight Gauge
-var gaugeWeight = new RadialGauge({
-  renderTo: 'gauge-weight',
-  width: 150,
-  height: 150,
-  units: "Weight (Kg)",
-  minValue: 0,
-  maxValue: 20,
-  colorValueBoxRect: "#007bff",
-  colorValueBoxRectEnd: "#007bff",
-  colorValueBoxBackground: "#cee6ff",
-  valueInt: 2,
-  majorTicks: [
-      "0",
-      "4",
-      "8",
-      "12",
-      "16",
-      "20"
-
-  ],
-  minorTicks: 4,
-  strokeTicks: true,
-  highlights: [
-      {
-          "from": 80,
-          "to": 100,
-          "color": "#4a9cf3"
-      }
-  ],
-  colorPlate: "#fff",
-  borderShadowWidth: 0,
-  borders: false,
-  needleType: "line",
-  colorNeedle: "#0d57a7",
-  colorNeedleEnd: "#0d57a7",
-  needleWidth: 2,
-  needleCircleSize: 3,
-  colorNeedleCircleOuter: "#0d57a7",
-  needleCircleOuter: true,
-  needleCircleInner: false,
-  animationDuration: 1500,
-  animationRule: "linear"
-}).draw();
-
-// Create Volume Gauge
-var gaugeVolume = new RadialGauge({
-  renderTo: 'gauge-volume',
-  width: 150,
-  height: 150,
-  units: "Volume (cm³)",
-  minValue: 0,
-  maxValue: 125000,
-  colorValueBoxRect: "#007bff",
-  colorValueBoxRectEnd: "#007bff",
-  colorValueBoxBackground: "#cee6ff",
-  valueInt: 2,
-  majorTicks: [
-      "0",
-      "25000",
-      "50000",
-      "75000",
-      "100000",
-      "125000"
-
-  ],
-  minorTicks: 4,
-  strokeTicks: true,
-  highlights: [
-      {
-          "from": 80,
-          "to": 100,
-          "color": "#4a9cf3"
-      }
-  ],
-  colorPlate: "#fff",
-  borderShadowWidth: 0,
-  borders: false,
-  needleType: "line",
-  colorNeedle: "#0d57a7",
-  colorNeedleEnd: "#0d57a7",
-  needleWidth: 2,
-  needleCircleSize: 3,
-  colorNeedleCircleOuter: "#0d57a7",
-  needleCircleOuter: true,
-  needleCircleInner: false,
-  animationDuration: 1500,
-  animationRule: "linear"
-}).draw();
+const panjang = document.getElementById('length');
+const lebar = document.getElementById('width');
+const tinggi = document.getElementById('height');
+const volume = document.getElementById('volume');
+const weight = document.getElementById('weight');
 
 document.addEventListener('DOMContentLoaded', (event) => {
   fetch('/readings')
     .then(response => response.json())
     .then(data => {
-      gaugeWeight.value = data.weight;
-      gaugeVolume.value = data.volume;
+      panjang.textContent = data.panjang;
+      lebar.textContent = data.lebar;
+      tinggi.textContent = data.tinggi;
+      volume.textContent = data.volume;
+      weight.textContent = data.weight;
     });
 
   if (!!window.EventSource) {
@@ -117,12 +36,34 @@ document.addEventListener('DOMContentLoaded', (event) => {
       console.log("new_readings", e.data);
       var myObj = JSON.parse(e.data);
       console.log(myObj);
-      gaugeWeight.value = myObj.weight;
-      gaugeVolume.value = myObj.volume;
+      panjang.textContent = myObj.panjang;
+      lebar.textContent = myObj.lebar;
+      tinggi.textContent = myObj.tinggi;
+      volume.textContent = myObj.volume;
+      weight.textContent = myObj.weight;
     }, false);
   }
 
   document.getElementById('printButton').addEventListener('click', () => {
     window.print();
   });
+
+  function updateDateTime() {
+    const now = new Date();
+    const date = now.toLocaleDateString();
+    
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+
+    const time = `${hours}:${minutes}`;
+    
+    document.getElementById('date').textContent = date;
+    document.getElementById('time').textContent = time;
+  }
+
+  // Memperbarui tanggal dan waktu setiap detik
+  setInterval(updateDateTime, 1000);
+
+  // Memperbarui tanggal dan waktu saat halaman dimuat
+  updateDateTime();
 });

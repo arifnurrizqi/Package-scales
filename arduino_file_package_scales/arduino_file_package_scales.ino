@@ -173,11 +173,7 @@ float measureWeight(){
   return scale.get_units(10)/1000; // dibagi 1000 untuk menghitung kilogram
 }
 
-float measureVolume(){
-  //float panjang;
-  //float lebar;
-  //float tinggi;
-  float volume;
+void measureDimension(float &panjang, float &lebar, float &tinggi){
   for(int i=0; i<5; i++){
     distanceArr[i] = measureDistance(i);
   }
@@ -186,7 +182,13 @@ float measureVolume(){
   lebar = ((distanceLimit[2] - distanceArr[2]) + (distanceLimit[4] -
   distanceArr[4]));
   tinggi = distanceLimit[0] - distanceArr[0];
-  volume = (panjang * lebar * tinggi);
+}
+
+// Fungsi untuk mengukur volume
+float measureVolume() {
+  measureDimension(panjang, lebar, tinggi);
+  volume = panjang * lebar * tinggi; // menghitung volume dengan rumus bangun ruang balok
+  
   Serial.print("panjang: ");
   Serial.print(panjang);
   Serial.print(" lebar: ");
@@ -195,11 +197,7 @@ float measureVolume(){
   Serial.print(tinggi);
   Serial.print(" volume: ");
   Serial.println(volume);
-  // if(distanceArr[0] < distanceLimit[0]){
-  // return 0;
-  // }else{
-  // return volume;
-  // }
+
   return volume;
 }
 
@@ -306,9 +304,12 @@ void initLittleFS() {
 }
 
 // Get Data Readings and return JSON object
-String getDataReadings(){
-  readings["weight"] = String(measureWeight());
-  readings["volume"] = String(measureVolume());
+String getDataReadings() {
+  readings["weight"] = String(weight);
+  readings["volume"] = String(volume);
+  readings["panjang"] = String(panjang);
+  readings["lebar"] = String(lebar);
+  readings["tinggi"] = String(tinggi);
   String jsonString = JSON.stringify(readings);
   return jsonString;
 }
