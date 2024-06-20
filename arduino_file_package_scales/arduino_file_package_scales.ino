@@ -115,13 +115,14 @@ void loop() {
   currentmillis = millis();
   if(currentmillis - previousmillis >= interval){
     previousmillis = currentmillis;
-    volume = measureVolume();
     weight = measureWeight();
 
     if(weight < 0.01){
       displayReady();
+      panjang, lebar, tinggi, volume = 0.0;
       Serial.println("Siap Mengukur");
     } else {
+      volume = measureVolume();
       displayData(volume, weight);
       Serial.print("Volume: ");
       Serial.println(volume);
